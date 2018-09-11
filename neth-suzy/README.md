@@ -1,4 +1,4 @@
-#LAB 06 (AJAX requests)
+# LAB 06 (AJAX requests)
 
 **Author**: Suzy Su and Neth Horn
 **Version**: 1.1.0 
