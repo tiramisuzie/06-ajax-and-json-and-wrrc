@@ -45,28 +45,33 @@ Article.fetchAll = () => {
   // REVIEW: What is this 'if' statement checking for? Where was the rawData set to local storage?
   // if statement is checking if there is rawdata in local storage already. The rawData is in the success function of the ajax call.
   // COMMENT: we determined the order of execution by making the API call to have data to work with, then we set article.loadAll to fetch data from AJAX from the ajax call to become article objects and then ran article.toHTML to append it to the page. if the orders reversed we would not have the data from ajax to append to the page.
-  if (localStorage.rawData) {
-
-    Article.loadAll(JSON.parse(localStorage.rawData));
-    Article.all.forEach((article) => {
-      article.toHtml();
-    });
-
-  } else {
-    $.ajax('http://127.0.0.1:8080/data/hackerIpsum.json',
-      {
-        success: function(data) {
-          Article.loadAll(data);
-          Article.all.forEach((article) => {
-            article.toHtml();
-          })
-          localStorage.setItem('rawData', JSON.stringify(data));
-        },
-        error: function() {
-          console.log ('Something went wrong');
-        }
+  $.ajax('http://127.0.0.1:8080/data/hackerIpsum.json', {
+    type: 'HEAD',
+    complete: (data) => {
+      let blogEtag = data.getResponseHeader('etag');
+      if (localStorage.blogEtag && blogEtag === localStorage.blogEtag) {
+        Article.loadAll(JSON.parse(localStorage.rawData));
+        Article.all.forEach((article) => {
+          article.toHtml();
+        });
+      } else {
+        $.ajax('http://127.0.0.1:8080/data/hackerIpsum.json',
+          {
+            success: function(data) {
+              Article.loadAll(data);
+              Article.all.forEach((article) => {
+                article.toHtml();
+              })
+              localStorage.setItem('rawData', JSON.stringify(data));
+              localStorage.setItem('blogEtag', blogEtag);
+            },
+            error: function() {
+              console.log ('Something went wrong');
+            }
+          }
+        )
       }
-    )
-  }
+    }
+  })
 }
 
