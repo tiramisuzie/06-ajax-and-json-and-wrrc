@@ -7,7 +7,7 @@
 This is a blog platform that makes an AJAX call to retrieve blog data and uses Handlebars.js and jQuery to format that data and append it to the page.
 
 ## Getting Started
-Run this by running live-server from the project's root directory.
+Run this by running live-server from this directory.
 
 ## Architecture
 This project uses HTML, CSS, and Javascript. It also uses the following libraries: Handlebars.js for creating the blog entry template, jQuery to make appending blog entries to the page easier. The CSS is written using SMACSS format for some reason.
