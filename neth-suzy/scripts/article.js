@@ -51,17 +51,15 @@ Article.fetchAll = () => {
       let blogEtag = data.getResponseHeader('etag');
       if (localStorage.blogEtag && blogEtag === localStorage.blogEtag) {
         Article.loadAll(JSON.parse(localStorage.rawData));
-        Article.all.forEach((article) => {
-          article.toHtml();
-        });
+
+        articleView.initIndexPage();
       } else {
         $.ajax('http://127.0.0.1:8080/data/hackerIpsum.json',
           {
             success: function(data) {
               Article.loadAll(data);
-              Article.all.forEach((article) => {
-                article.toHtml();
-              })
+
+              articleView.initIndexPage();
               localStorage.setItem('rawData', JSON.stringify(data));
               localStorage.setItem('blogEtag', blogEtag);
             },
