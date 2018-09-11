@@ -1,8 +1,5 @@
 ![CF](https://camo.githubusercontent.com/70edab54bba80edb7493cad3135e9606781cbb6b/687474703a2f2f692e696d6775722e636f6d2f377635415363382e706e67) Lab 06: jQuery AJAX & JSON
 ===
-## Code Wars Challenge
-
-Complete [today's Kata](https://www.codewars.com/kata/nice-array) and follow the submission instructions from Lab 01.
 
 ## Lab 06 Submission Instructions
 Follow the submission instructions from Lab 01.
