@@ -24,8 +24,8 @@ Article.prototype.toHtml = function() {
   // it is a ternary operator. The ? represents if the colon is the else. In other words it is checking if this.publishStatus = this.publishedOn is truthy and if it is it will display publish days ago, if it returns as false it will display draft.
   this.publishStatus = this.publishedOn ? `published ${this.daysAgo} days ago` : '(draft)';
   this.body = marked(this.body);
-
-  return template(this);
+  const compliledArticle = template(this);
+  $('#articles').append(compliledArticle);
 };
 
 // REVIEW: There are some other functions that also relate to all articles across the board, rather than just single instances. Object-oriented programming would call these "class-level" functions, that are relevant to the entire "class" of objects that are Articles.
@@ -43,11 +43,30 @@ Article.loadAll = articleData => {
 // REVIEW: This function will retrieve the data from either a local or remote source, and process it, then hand off control to the View.
 Article.fetchAll = () => {
   // REVIEW: What is this 'if' statement checking for? Where was the rawData set to local storage?
+  // if statement is checking if there is rawdata in local storage already. The rawData is in the success function of the ajax call.
+  // COMMENT: we determined the order of execution by making the API call to have data to work with, then we set article.loadAll to fetch data from AJAX from the ajax call to become article objects and then ran article.toHTML to append it to the page. if the orders reversed we would not have the data from ajax to append to the page.
   if (localStorage.rawData) {
 
-    Article.loadAll();
+    Article.loadAll(JSON.parse(localStorage.rawData));
+    Article.all.forEach((article) => {
+      article.toHtml();
+    });
 
   } else {
-
+    $.ajax('http://127.0.0.1:8080/data/hackerIpsum.json',
+      {
+        success: function(data) {
+          Article.loadAll(data);
+          Article.all.forEach((article) => {
+            article.toHtml();
+          })
+          localStorage.setItem('rawData', JSON.stringify(data));
+        },
+        error: function() {
+          console.log ('Something went wrong');
+        }
+      }
+    )
   }
 }
+
